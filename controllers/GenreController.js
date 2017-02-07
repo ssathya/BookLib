@@ -37,11 +37,46 @@ exports.genreDetail = function (req, res, next) {
     });
 };
 exports.genreCreateGet = function (req, res, next) {
-    res.send('NOT IMPLEMENTED: Genre create GET');
+    res.render('genre_form', { title: 'Create Genre' });
 }
 exports.genreCreatePost = function (req, res, next) {
-    res.send('NOT IMPLEMENTED: Genre create POST');
-}
+
+    //Trim and escape the name
+    req.sanitize('name').escape();
+    req.sanitize('name').trim();
+
+    //Check for empty string
+    req.checkBody('name', 'Genre name required').notEmpty();
+
+    
+
+    //create a genre object
+    var genre = new Genre({ name: req.body.name });
+    //Run validation
+    var errors = req.validationErrors();
+    if (errors) {
+        res.render('genre_form', {
+            title: 'Create Genre',
+            genre: genre,
+            errors: errors
+        });
+        return;
+    }
+    Genre.findOne({ 'name': req.body.name })
+        .exec(function (err, foundGenre) {
+            console.log("Found genre" + foundGenre);
+            if (err) { return next(err); }
+            if (foundGenre)//Genre already exists
+                res.redirect(foundGenre.url);
+            else {
+                genre.save(function (err) {
+                    if (err) { return next(err); }
+                    res.redirect(genre.url);
+                });
+            }
+        });
+};
+
 exports.genreDeleteGet = function (req, res, next) {
     res.send('NOT IMPLEMENTED: Genre delete GET');
 }

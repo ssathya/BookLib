@@ -37,11 +37,43 @@ exports.authorDetail = function (req, res, next) {
     });
 };
 exports.authorCreateGet = function (req, res, next) {
-    res.send('NOT IMPLEMENTED: Author create GET');
+    res.render('author_form', { title: 'Create Author' });
 }
 exports.authorCreatePost = function (req, res, next) {
-    res.send('NOT IMPLEMENTED: Author create POST');
-}
+    req.checkBody('firstName', 'First name is required').notEmpty();
+    req.checkBody('lastName', 'Last name is required').notEmpty();
+    req.checkBody('dateOfBirth', 'Invalid date').optional({ checkFalsy: true }).isDate();
+    req.checkBody('dateOfDeath', 'Invalid date').optional({ checkFalsy: true }).isDate();
+
+    req.sanitize('firstName').escape();
+    req.sanitize('lastName').escape();
+    req.sanitize('firstName').trim();
+    req.sanitize('lastName').trim();
+    req.sanitize('dateOfBirth').toDate();
+    req.sanitize('dateOfDeath').toDate();
+
+    var errors = req.validationErrors();
+
+    var author = new Author(
+        {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            dateOfBirth: req.body.dateOfBirth,
+            dateOfDeath: req.body.dateOfDeath
+        });
+    if (errors) {
+        res.render('author_form', {
+            title: 'Create Author',
+            author: author,
+            errors: errors
+        });
+        return;
+    }
+    author.save(function (err) {
+        if (err) { return next(err); }
+        res.redirect(author.url);
+    });
+};
 exports.authorDeleteGet = function (req, res, next) {
     res.send('NOT IMPLEMENTED: Author delete GET');
 }

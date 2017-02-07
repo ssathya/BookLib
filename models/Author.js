@@ -23,10 +23,22 @@ AuthorSchema.virtual('url')
     });
 
 AuthorSchema.virtual('dateOfBirthFormatted').get(function () {
+    if (this.dateOfBirth === undefined)
+        return '';
+    if (this.dateOfBirth === null)
+        return '';
+
     return moment(this.dateOfBirth).format('MMMM Do, YYYY');
+
 });
 AuthorSchema.virtual('dateOfDeathFormatted').get(function () {
+    if (this.dateOfDeath === undefined)
+        return '';
+    if (this.dateOfDeath === null)
+        return '';
+
     return moment(this.dateOfDeath).format('MMMM Do, YYYY');
+
 });
 //Export model
 module.exports = mongoose.model('Author', AuthorSchema);
