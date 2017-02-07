@@ -1,5 +1,6 @@
 var Author = require('../models/Author');
-
+var Book = require('../models/Book');
+var async = require('async');
 /**
  * authorList
  * 
@@ -16,8 +17,25 @@ exports.authorList = function (req, res, next) {
         });
 };
 exports.authorDetail = function (req, res, next) {
-    res.send('NOT IMPLEMENTED: Author detail' + req.params.id);
-}
+    async.parallel({
+        author: function (callback) {
+            Author.findById(req.params.id)
+                .exec(callback);
+        },
+        authorBooks: function (callback) {
+            Book.find({ 'author': req.params.id }, 'title summary')
+                .exec(callback);
+        },
+    }, function (err, results) {
+        if (err) { return next(err); }
+        res.render('author_detail',
+            {
+                title: 'Author Detail',
+                author: results.author,
+                author_books: results.authorBooks
+            });
+    });
+};
 exports.authorCreateGet = function (req, res, next) {
     res.send('NOT IMPLEMENTED: Author create GET');
 }

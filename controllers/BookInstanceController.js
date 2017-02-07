@@ -13,8 +13,16 @@ exports.bookInstanceList = function (req, res, next) {
         });
 };
 exports.bookInstanceDetail = function (req, res, next) {
-    res.send('NOT IMPLEMENTED: BookInstance detail' + req.params.id);
-}
+    BookInstance.findById(req.params.id)
+        .populate('book')
+        .exec(function(err, bookInstance){
+            if (err){return next(err);}
+            res.render('bookinstance_detail',{
+                title:'Book:',
+                bookinstance:bookInstance
+            });
+        });
+};
 exports.bookInstanceCreateGet = function (req, res, next) {
     res.send('NOT IMPLEMENTED: BookInstance create GET');
 }
