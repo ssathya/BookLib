@@ -11,7 +11,10 @@ block content
       label(for='author') Author:
       select#author.form-control(type='select', placeholder='Select author' name='author' required='true' )
         for author in authors
-            option(value=author._id) #{author.name}
+            if book
+              option(value=author._id selected=(author._id.toString()===book.author._id.toString()?'selected':false) ) #{author.name}
+            else
+              option(value=author._id) #{author.name}
     div.form-group
       label(for='summary') Summary:
       input#summary.form-control(type='textarea', rows="5" placeholder='Summary' name='summary' value=(undefined===book ? '' : book.summary) required='true')
