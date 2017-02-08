@@ -38,10 +38,6 @@ function GetBookDetails(req, res, next, bookParam) {
     }, function (err, results) {
         if (err) { return next(err); }
         //Mark out selected genres as checked
-        console.log('All genres');
-        console.log(results.genres);
-        console.log('Book genres');
-        console.log(results.book.genre);
         for (i = 0; i < results.book.genre.length; i++) {
             for (j = 0; j < results.genres.length; j++) {
                 if (results.book.genre[i]._id.toString() ===
@@ -86,8 +82,7 @@ exports.bookList = function (req, res, next) {
         .exec(function (err, list_books) {
             if (err) {
                 return next(err);
-            }
-            console.log(list_books);
+            }            
             res.render('book_list', { title: 'Book List', book_list: list_books });
         });
 };
