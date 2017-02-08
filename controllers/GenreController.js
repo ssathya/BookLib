@@ -26,6 +26,7 @@ exports.genreDetail = function (req, res, next) {
         },
         genreBooks: function (callback) {
             Book.find({ 'genre': req.params.id })
+                .sort([['genre', 'ascending']])
                 .exec(callback);
         },
     }, function (err, results) {
@@ -48,7 +49,7 @@ exports.genreCreatePost = function (req, res, next) {
     //Check for empty string
     req.checkBody('name', 'Genre name required').notEmpty();
 
-    
+
 
     //create a genre object
     var genre = new Genre({ name: req.body.name });
