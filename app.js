@@ -19,7 +19,7 @@ var catalog = require('./routes/catalog');
 
 var app = express();
 app.use(helmet());
-var mongoDB = process.env.MONGODB_URI || 'mongodb://loadit:pass123@ds027155.mlab.com:27155/sridharlab';
+var mongoDB = process.env.MONGODB_URI || 'mongodb://user:password@ds027155.mlab.com:27155/sridharlab';
 mongoose.connect(mongoDB);
 var db = mongoose.connection;
 

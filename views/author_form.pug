@@ -11,7 +11,7 @@ block content
         div.form-group
             label(for='dateOfBirth') Date of Birth:
             input#dateOfBirth.form-control(type='date', name='dateOfBirth', value=(undefined===author ? '':author.dateOfBirth) placeholder='mm/dd/yyyy')
-            label(for='dateOfDeath') Date of Birth:
+            label(for='dateOfDeath') Date of Death:
             input#dateOfDeath.form-control(type='date', name='dateOfDeath', value=(undefined===author ? '':author.dateOfDeath) placeholder='mm/dd/yyyy')
         button.btn.btn-primary(type='submit') Submit
         if errors
